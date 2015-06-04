@@ -1,0 +1,24 @@
+<!doctype html>
+<html>
+<head>
+<style>
+body {
+	background-color: #dfdfdf;
+}
+</style>
+</head>
+<body>
+<script type="text/javascript" id="api-41q-widget" class="api-41q-widget">
+
+  var _API_41Q = [];
+  _API_41Q.push(['CLIENT_ID', 'CLIENT_PUBLIC_KEY', 'en']);
+
+  _API_41Q.push(['render_questions', {count: 20, response_parts: 'question+answer+help_head+help_text'}]);
+  var s = document.createElement('script');
+  s.type = 'text/javascript';
+  s.async = true;
+  s.src = 'http://static.41q.com/v1.js';
+  var embedder = document.getElementById('api-41q-widget');
+  embedder.parentNode.insertBefore(s, embedder);
+</script>
+</body>
