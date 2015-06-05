@@ -31,6 +31,7 @@ body .cleanslate .api-41q-question-wrapper,
 body .cleanslate .api-41q-labeled,
 body .cleanslate .api-41q-controls,
 body .cleanslate .api-41q-result-wrapper,
+body .cleanslate .api-41q-info-wrapper,
 body .cleanslate .api-41q-loading-wrapper {
   padding:15px !important;
 }

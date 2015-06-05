@@ -36,13 +36,18 @@
     lang: 'en',
     url: 'http://api.41q.com/v1/',
     _current_question: 1,
-    request: function(action, config, callback) {
+    _answers: [],
+    request: function(action, config, callback, errCallback) {
       var xmlhttp;
       // compatible with IE7+, Firefox, Chrome, Opera, Safari
       xmlhttp = new XMLHttpRequest();
       xmlhttp.onreadystatechange = function(){
-          if (xmlhttp.readyState == 4 && xmlhttp.status == 200){
-              callback(JSON.parse(xmlhttp.responseText));
+          if (xmlhttp.readyState == 4) {
+              if (xmlhttp.status == 200) {
+                callback(JSON.parse(xmlhttp.responseText));
+              } else {
+                errCallback(JSON.parse(xmlhttp.responseText));
+              }
           }
       }
       config.response_format = 'json';
@@ -54,11 +59,11 @@
       xmlhttp.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
       xmlhttp.send(JSON.stringify(config));
     },
-    questions: function(config, cb) {
-      this.request('questions', config, cb);
+    questions: function(config, cb, errCb) {
+      this.request('questions', config, cb, errCb);
     },
-    result: function(config, cb) {
-      this.request('result', config, cb);
+    result: function(config, cb, errCb) {
+      this.request('result', config, cb, errCb);
     },
 
     render_result: function(config) {
@@ -80,6 +85,13 @@
         html+= '</div>';
 
         html+= '<p class="api-41q-labeled">Powered by <a href="http://www.41q.com">41Q.com</a></p>';
+        div.innerHTML = html;
+      }, function(data) {
+
+        var html = '';
+        html+= '<div class="api-41q-info-wrapper">';
+        html+= '<p>' + 'The result could not be loaded. Result code ' + data.answers + '. Error code ' + data.code + '.</p>';
+        html+= '</div>';
         div.innerHTML = html;
       });
     },
@@ -114,9 +126,11 @@
           } else {
             var c = {};
             var i = 1;
+            global.API_41Q._answers = [];
             while (i < global.API_41Q._current_question) {
               var radios = document.getElementsByName('q' + i);
               c['q' + i] = (radios[0].checked ? 1 : 2);
+              global.API_41Q._answers.push(c['q' + i]);
               ++i;
             }
 
@@ -178,6 +192,12 @@
           });
         }
 
+      }, function(data) {
+        var html = '';
+        html+= '<div class="api-41q-info-wrapper">';
+        html+= '<p>' + 'The questions could not be loaded. Error code ' + data.code + '.</p>';
+        html+= '</div>';
+        div.innerHTML = html;
       });
     }
   };
